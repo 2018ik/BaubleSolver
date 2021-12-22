@@ -7,7 +7,10 @@ import datetime
 board = [[0]*10 for _ in range(10)]
 pieces = shapes.getAllShapes()
 colors = {}
-min_adjacency = 5
+
+min_adjacency = 5 # higher number makes more "human" moves, but can miss all possible combinations 
+show_board = True # displays board
+save_image = False # saves image for gif, requires show_board to be True
 
 for index,piece in enumerate(pieces):
     for orientation in shapes.getAllOrientations(piece):
@@ -39,38 +42,51 @@ def putValidPiece(piece, x, y):
 
 def hasLineArea(x, y):
     # Check if there is a 3-long enclosed area like:
-    # 1 1 1 1
-    # 5 0 0 0
-    # 4 4 4 4
+    # ? 1 1 1 ?
+    # 5 0 0 0 ?
+    # ? 4 4 4 ?
     # or if there is a 5-long area like:
     # 1 1 1 1 1
     # 0 0 0 0 0
     # 4 4 4 4 4
-    # This means we must need the line or long L
-    vertical_enclosed = True
-    horizontal_enclosed = True
-    vertical_open = True
-    horizontal_open = True
+    # This means we must need the line or long L.
+
+    horizontal_edge = True # this will be true iff both spaces on the edge - (1,0) and (1, 4) in the example - are open (i.e. in the board and not taken)
+    horizontal_middle = True # this will be true iff the center three spaces - (1,1), (1,2) and (1,3) in the example, are open 
+    vertical_edge = True 
+    vertical_middle = True 
+    horizontal_5 = True # this will be true iff five cols in a row go (from top to bottom) taken - not taken - taken
+    vertical_5 = True 
     for edges in [(-1, 0), (3, 0)]:
         if isInBoard(x+edges[0], y) and board[x+edges[0]][y] not in (0, "#"):
-            vertical_open = False
+            vertical_edge = False
     for edges in [(0, -1), (0, 3)]:
         if isInBoard(x, y+edges[1]) and board[x][y+edges[1]] not in (0, "#"):
-            horizontal_open = False
-    for i in range(3):
+            horizontal_edge = False
+    for i in range(5):
         vertx, verty = x + i, y
         horzx, horzy = x, y + i
+        # checks middle row for empty space
         if not isInBoard(vertx, verty) or board[vertx][verty] not in (0, "#"):
-            vertical_enclosed = False
+            if i <= 3:
+                vertical_middle = False
+            vertical_5 = False
         if not isInBoard(horzx, horzy) or board[horzx][horzy] not in (0, "#"):
-            horizontal_enclosed = False
+            if i <= 3:
+                horizontal_middle = False
+            horizontal_5 = False
+        # checks upper and lower row for taken space
         for direction in [(0,1), (0,-1)]:
             if isInBoard(vertx+direction[0], verty+direction[1]) and board[vertx+direction[0]][verty+direction[1]] in (0, "#"):
-                vertical_enclosed = False
+                if i <= 3:
+                    vertical_middle = False
+                vertical_5 = False
         for direction in [(1,0), (-1,0)]:
             if isInBoard(horzx+direction[0], horzy+direction[1]) and board[horzx+direction[0]][horzy+direction[1]] in (0, "#"):
-                horizontal_enclosed = False
-    return (vertical_enclosed and not vertical_open) or (horizontal_enclosed and not horizontal_open)
+                if i <= 3:
+                    horizontal_middle = False
+                horizontal_5 = False
+    return (vertical_middle and not vertical_edge) or (horizontal_middle and not horizontal_edge) or vertical_5 or horizontal_5
         
 def isBoardValid():
     # Very rudimentary checks for board validity
@@ -166,7 +182,8 @@ def backtrack():
     # Solves the puzzle
     # print(board)
     valid, seen_pieces = isBoardValid()
-    # graphics.updateBoard(board, fig, lines) #uncomment this for fancy animation
+    if show_board:
+        graphics.updateBoard(board, fig, lines, save_image=save_image)
     if not valid:
         # Backtrack immediately if board is invalid
         return
@@ -176,7 +193,8 @@ def backtrack():
         with open('solutions.txt', 'a') as f:
             f.write(str(datetime.datetime.now()) + "\n")
             f.write(str(board) + "\n")
-        # time.sleep(5) # for animation purposes
+        if show_board:
+            time.sleep(5)
     else:
         # The order of the pieces does not matter; if going ...cross, gun, b does not work, 
         # then going ...gun, b, cross will not work either. Therefore, we can simply choose
@@ -193,27 +211,9 @@ def backtrack():
     for x, y, piece in seen_pieces:
         pieces.append(piece)
         removePiece(piece, x, y)
-#fig, lines = graphics.initializeBoard() #uncomment this for fancy animation
 
-# board = [[2, 2, 2, 2, 0, 0, 0, 0, 0, 0], 
-# [2, 10, 10, 10, 0, 0, 0, 0, 0, 0], 
-#  [10, 10, 0, 0, 0, 0, 0, 0, 0, 0], 
-#  [9, 9, 9, 0, 0, 0, 0, 0, 0, 0], 
-#  [9, 7, 9, 0, 0, 0, 0, 0, 0, 0],
-#  [7, 7, 7, 0, 0, 0, 0, 0, 0, 0], 
-#  [1, 7, 4, 4, 0, 0, 0, 0, 0, 0], 
-#  [1, 4, 4, 0, 0, 0, 0, 0, 0, 0], 
-#  [1, 4, 0, 0, 0, 0, 0, 0, 0, 0], 
-#  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-
-# real_pieces = []
-# for piece in pieces:
-#     if colors["".join([str(x) for x in piece])] not in  [2,10,9,7,4,1]:
-#         real_pieces.append(piece)
-
-# pieces = real_pieces
-# print(isBoardValid())
-# while 1:
-#     graphics.updateBoard(board, fig, lines)
+if show_board:
+    fig, lines = graphics.initializeBoard()
+    
 backtrack()
 
