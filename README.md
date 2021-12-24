@@ -21,4 +21,6 @@ A few of the parameters can be adjusted. Like whether or not to use graphics, an
 
 ## Example
 
+This was done with adjacency=9
+
 ![example](example.gif)
