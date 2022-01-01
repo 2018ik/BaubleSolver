@@ -1,4 +1,4 @@
-# "Drop of Cleverness Bauble Spelling Tray Puzzle Toy" solver
+# "Drop of Cleverness Bauble Spelling Tray" solver
 
 Uses backtracking and various heuristics to try to solve for all solutions. 
 
@@ -10,11 +10,15 @@ Uses backtracking and various heuristics to try to solve for all solutions.
 
 `gif.py`: generates a gif
 
+`solutions.py`: generates images of every solution
+
 
 ## Usage
 Run `puzzle.py` to solve the puzzle
 
 Run `gif.py` to generate a gif of the previous puzzle run
+
+Run `solutions.py` to generate images of every solution
 
 ## To customize
 A few of the parameters can be adjusted. Like whether or not to use graphics, and how "human-like" the moves should be.
