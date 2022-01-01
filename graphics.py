@@ -8,6 +8,7 @@ import os
 
 path = 'gif/'
 colors = ["#000000", "#42d4f5", "#f5ce42", "#f59042", "#f1d2fa", "#ff96fa", "#ff1e00", "#ff6f00", "#8b8b8c", "#0004ff", "#a84d4d", "#00660f", "#f7f7f7"]
+saved_image_dpi = 70 # higher num -> higher res
 
 def showShape(shape):
     # Shows the shape using the cartesian plane
@@ -48,7 +49,7 @@ def updateBoard(board, fig, lines, save_image=False):
             lines[iterator].set_color(color)
             iterator += 1
     if save_image:
-        plt.savefig(path + str(time.time()) + '.png', dpi=70, bbox_inches='tight', pad_inches=0)
+        plt.savefig(path + str(time.time()) + '.png', dpi=saved_image_dpi, bbox_inches='tight', pad_inches=0)
     fig.canvas.draw()
     fig.canvas.flush_events()
 
