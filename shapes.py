@@ -1,25 +1,26 @@
 import random
 import copy
-line = [(0,0), (1,0), (2,0), (3,0)]
-long_l = [(0,0), (0,1), (1,0), (2,0), (3,0)]
-short_l = [(0,0), (0,1), (1,0), (2,0)]
-w = [(0,0), (1,0), (1,1), (2,1), (2,2)]
-gun = [(0,0), (1,1), (1,0), (2,0), (3,0)]
-square = [(0,0), (0,1), (1,0), (1,1)]
-cross = [(1,0), (0,1), (1,1), (2,1), (1,2)]
-b = [(0,0), (1,1), (1,0), (2,0), (2,1)]
-c = [(0,0), (1,0), (2,0), (0,1), (2,1)]
-z = [(0,0), (1,0), (2,0), (2,1), (3,1)]
-small_v = [(0,0), (1,0), (1,1)]
-big_v = [(0,0), (1,0), (2,0), (2,1), (2,2)]
+line = sorted([(0,0), (1,0), (2,0), (3,0)])
+long_l = sorted([(0,0), (0,1), (1,0), (2,0), (3,0)])
+short_l = sorted([(0,0), (0,1), (1,0), (2,0)])
+w = sorted([(0,0), (1,0), (1,1), (2,1), (2,2)])
+gun = sorted([(0,0), (1,1), (1,0), (2,0), (3,0)])
+square = sorted([(0,0), (0,1), (1,0), (1,1)])
+cross = sorted([(1,0), (0,1), (1,1), (2,1), (1,2)])
+b = sorted([(0,0), (1,1), (1,0), (2,0), (2,1)])
+c = sorted([(0,0), (1,0), (2,0), (0,1), (2,1)])
+z = sorted([(0,0), (1,0), (2,0), (2,1), (3,1)])
+small_v = sorted([(0,0), (1,0), (1,1)])
+big_v = sorted([(0,0), (1,0), (2,0), (2,1), (2,2)])
 
 # group shapes by size
-shapes_by_size = [
-    [sorted(x) for x in [small_v]], #3
-    [sorted(x) for x in [square, short_l, line]], #4
-    [sorted(x) for x in [long_l, w, gun, cross, b, c, z, big_v]] #5
-]
+shapes_by_size = [[],[],[]]
 
+three = [small_v]
+four = [square, short_l, line]
+five = [long_l, w, gun, cross, b, c, z, big_v]
+
+    
 def shift(shape):
     # Given a shape starting at any coordinate, will shift it so that it is as close to (0,0) as possible
     shifted_shape = []
@@ -84,6 +85,7 @@ def getAllOrientationsOfShapes(shapes_list):
     return all
 
 def getShapesForAreaOfSizeN(n):
+    # Deprecated, may or may not work
     # Returns list[list[shapes], list[shapes]] where each inner list represents a possible combination of shapes
     solutions = []
     def backtrack(shapes_by_size, cur, total):
@@ -102,3 +104,10 @@ def getShapesForAreaOfSizeN(n):
                     cur.pop()
     backtrack(shapes_by_size, [], n)
     return solutions
+
+for shape in three:
+    shapes_by_size[0].extend(getAllOrientations(shape))
+for shape in four:
+    shapes_by_size[1].extend(getAllOrientations(shape))
+for shape in five:
+    shapes_by_size[2].extend(getAllOrientations(shape))

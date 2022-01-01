@@ -48,7 +48,7 @@ def updateBoard(board, fig, lines, save_image=False):
             lines[iterator].set_color(color)
             iterator += 1
     if save_image:
-        plt.savefig(path + str(time.time()) + '.png')
+        plt.savefig(path + str(time.time()) + '.png', dpi=70, bbox_inches='tight', pad_inches=0)
     fig.canvas.draw()
     fig.canvas.flush_events()
 
