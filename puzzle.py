@@ -200,8 +200,8 @@ def backtrack():
     # isBoardValid sometimes places a piece automatically if it's the only one that fits,
     # so we keep track of these to backtrack later (add back to pieces list and remove)
     valid, placed_pieces = isBoardValid()
-    # if show_board:
-    #     graphics.updateBoard(board, fig, lines, save_image=save_image)
+    if show_board:
+        graphics.updateBoard(board, fig, lines, save_image=save_image)
     if not valid:
         # Backtrack immediately if board is invalid
         return
