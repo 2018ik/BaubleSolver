@@ -235,23 +235,6 @@ def backtrack():
 
 if show_board:
     fig, lines = graphics.initializeBoard()
-
-# board = [
-# [0, 0, 0, 0,0, 10, 5, 5, 5, 5], 
-# [0, 0, 0, 0, 10, 10, 8, 8, 5, 0], 
-# [0, 0, 0, 0, 10, 8, 8, 8, 0, 0], 
-# [0, 0, 0, 0, 10, 4, 4, 0, 0, 0], 
-# [0, 0, 0, 0, 4, 4, 0, 0, 0, 0],
-# [0, 0, 0, 0, 4, 0, 0, 0, 0, 0], 
-# [1, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-# [1, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-# [1, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-# [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-
-# real_pieces = []
-# for piece in pieces:
-#     if colors["".join([str(x) for x in piece])]  in [2,6,12,11,7,3,9]:
-#         real_pieces.append(piece)
-# pieces = real_pieces
+    
 backtrack()
 
