@@ -3,8 +3,9 @@ import graphics
 import time
 import random
 import datetime
+import numpy as np
 
-board = [[0]*10 for _ in range(10)]
+board = np.array([[0]*10 for _ in range(10)])
 pieces = shapes.getAllShapes()
 colors = {}
 
@@ -28,7 +29,7 @@ def floodfill(x, y, path):
     # Helper function for isBoardValid, fills an enclosed space and returns coordinates 
     if isPositionValid(x,y):
         path.append((x,y))
-        board[x][y] = "#"
+        board[x][y] = -1
         for direction in [(1,0), (0,1), (-1,0), (0,-1)]:
             floodfill(x+direction[0], y+direction[1], path)
 
@@ -36,7 +37,7 @@ def undoFloodFill():
     # Helper function for isBoardValid, undos floodfill
     for x in range(len(board)):
         for y in range(len(board)-x): 
-            if board[x][y] == "#":
+            if board[x][y] == -1:
                 board[x][y] = 0
 
 def putValidPiece(piece, x, y):
@@ -65,21 +66,21 @@ def hasLineArea(x, y):
         vertx, verty = x + i, y
         horzx, horzy = x, y + i
         # checks middle row for empty space
-        if not isInBoard(vertx, verty) or board[vertx][verty] not in (0, "#"):
+        if not isInBoard(vertx, verty) or board[vertx][verty] not in (0, -1):
             if i < 3:
                 vertical_3 = False
             vertical_5 = False
-        if not isInBoard(horzx, horzy) or board[horzx][horzy] not in (0, "#"):
+        if not isInBoard(horzx, horzy) or board[horzx][horzy] not in (0, -1):
             if i < 3:
                 horizontal_3 = False
             horizontal_5 = False
         # checks upper and lower row for taken space
         for direction in [(0,1), (0,-1)]:
-            if isInBoard(vertx+direction[0], verty+direction[1]) and board[vertx+direction[0]][verty+direction[1]] in (0, "#"):
+            if isInBoard(vertx+direction[0], verty+direction[1]) and board[vertx+direction[0]][verty+direction[1]] in (0, -1):
                 if i < 3:
                     vertical_3 = False
                 vertical_5 = False
-            if isInBoard(horzx+direction[1], horzy+direction[0]) and board[horzx+direction[1]][horzy+direction[0]] in (0, "#"):
+            if isInBoard(horzx+direction[1], horzy+direction[0]) and board[horzx+direction[1]][horzy+direction[0]] in (0, -1):
                 if i < 3:
                     horizontal_3 = False
                 horizontal_5 = False
@@ -87,11 +88,11 @@ def hasLineArea(x, y):
          return True
     # if horizontal_3:
     #     # check for at least one side (left or right) to be blocked
-    #     if (not isInBoard(x, y-1) or board[x][y-1] not in (0, "#")) or (not isInBoard(x, y+3) or board[x][y+3] not in (0, "#")):
+    #     if (not isInBoard(x, y-1) or board[x][y-1] not in (0, -1)) or (not isInBoard(x, y+3) or board[x][y+3] not in (0, -1)):
     #         return True
     # if vertical_3:
     #     # check for at least one side (top or bottom) to be blocked
-    #     if (not isInBoard(x-1, y) or board[x-1][y] not in (0, "#")) or (not isInBoard(x+3, y) or board[x+3][y] not in (0, "#")):
+    #     if (not isInBoard(x-1, y) or board[x-1][y] not in (0, -1)) or (not isInBoard(x+3, y) or board[x+3][y] not in (0, -1)):
     #         return True
     return False
         
