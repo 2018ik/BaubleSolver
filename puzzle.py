@@ -2,7 +2,6 @@ import shapes
 import graphics 
 import time
 import random
-import datetime
 import numpy as np
 
 board = np.array([[0]*10 for _ in range(10)])
@@ -210,7 +209,6 @@ def backtrack():
         # A solution must be found if there are no more pieces, since pieces can only be placed in valid locations
         print("found a solution")
         with open('solutions.txt', 'a') as f:
-            f.write(str(datetime.datetime.now()) + "\n")
             f.write(str(board) + "\n")
         if show_board:
             time.sleep(5)
